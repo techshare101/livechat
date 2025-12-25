@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/Button";
 import { BarChart3, ChevronDown } from "lucide-react";
 
@@ -139,6 +140,16 @@ export function NavbarWithDropdowns() {
         </div>
 
         <div className="flex items-center gap-4">
+          <SignedOut>
+            <SignInButton mode="modal">
+              <button className="text-zinc-400 hover:text-white transition-colors text-sm">
+                Sign In
+              </button>
+            </SignInButton>
+          </SignedOut>
+          <SignedIn>
+            <UserButton afterSignOutUrl="/" />
+          </SignedIn>
           <Link href="/app">
             <Button variant="primary" size="sm">
               Try Free

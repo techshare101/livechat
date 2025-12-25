@@ -5,6 +5,7 @@ import { Chart as ChartJS } from "chart.js";
 import { motion } from "framer-motion";
 import { BarChart3, ArrowLeft, Download, RefreshCw, MessageSquare } from "lucide-react";
 import Link from "next/link";
+import { useUser, SignInButton } from "@clerk/nextjs";
 
 import { FileUpload } from "@/components/chart/FileUpload";
 import { PromptInput } from "@/components/chart/PromptInput";
@@ -22,6 +23,7 @@ import { DatasetSchema } from "@/lib/schema/dataset";
 type AppState = "upload" | "prompt" | "chart";
 
 export default function AppPage() {
+  const { isSignedIn } = useUser();
   const [state, setState] = useState<AppState>("upload");
   const [fileName, setFileName] = useState<string>("");
   const [rawData, setRawData] = useState<Record<string, unknown>[]>([]);
@@ -268,10 +270,19 @@ export default function AppPage() {
                         <MessageSquare className="w-4 h-4 mr-2" />
                         Refine Chart
                       </Button>
-                      <Button variant="secondary" size="sm" onClick={handleExportPNG}>
-                        <Download className="w-4 h-4 mr-2" />
-                        Export PNG
-                      </Button>
+                      {isSignedIn ? (
+                        <Button variant="secondary" size="sm" onClick={handleExportPNG}>
+                          <Download className="w-4 h-4 mr-2" />
+                          Export PNG
+                        </Button>
+                      ) : (
+                        <SignInButton mode="modal">
+                          <Button variant="secondary" size="sm">
+                            <Download className="w-4 h-4 mr-2" />
+                            Export PNG
+                          </Button>
+                        </SignInButton>
+                      )}
                     </div>
                   )}
                 </>
