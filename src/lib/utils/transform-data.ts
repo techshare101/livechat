@@ -22,9 +22,20 @@ export function transformData(
     limit: spec.limit > 0 ? spec.limit : undefined,
   };
 
+  console.log("=== TRANSFORM DEBUG ===");
+  console.log("Input data rows:", data.length);
+  console.log("Spec:", JSON.stringify(spec, null, 2));
+  console.log("Transformation:", JSON.stringify(transformation, null, 2));
+
   let grouped = applyGrouping(data, { ...transformation, yAxisColumn: spec.yAxisColumn });
+  console.log("After grouping:", grouped.length, "rows");
+  console.log("Grouped sample:", grouped.slice(0, 3));
+
   let sorted = applySorting(grouped, transformation);
   let limited = applyLimit(sorted, transformation.limit);
+
+  console.log("After limit:", limited.length, "rows");
+  console.log("Limited sample:", limited.slice(0, 3));
 
   const labels = limited.map((row) => formatLabel(row[spec.xAxisColumn]));
   
@@ -33,9 +44,14 @@ export function transformData(
     data: limited.map((row) => {
       // Try yAxisColumn first, then aggregationColumn, then fallback
       const value = row[spec.yAxisColumn] ?? row[spec.aggregationColumn] ?? row["_aggregatedValue"];
+      console.log(`Row ${spec.xAxisColumn}=${row[spec.xAxisColumn]}, yAxisColumn=${spec.yAxisColumn}, value=${value}`);
       return Number(value) || 0;
     }),
   }];
+
+  console.log("Final labels:", labels);
+  console.log("Final data:", datasets[0].data);
+  console.log("=== END DEBUG ===");
 
   return { labels, datasets };
 }
