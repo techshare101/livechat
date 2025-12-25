@@ -9,6 +9,8 @@ interface ButtonProps {
   size?: "sm" | "md" | "lg";
   className?: string;
   onClick?: () => void;
+  type?: "button" | "submit" | "reset";
+  disabled?: boolean;
 }
 
 export function Button({
@@ -17,6 +19,8 @@ export function Button({
   size = "md",
   className = "",
   onClick,
+  type = "button",
+  disabled = false,
 }: ButtonProps) {
   const baseStyles =
     "inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-400/50 focus:ring-offset-2 focus:ring-offset-black";
@@ -38,9 +42,11 @@ export function Button({
 
   return (
     <motion.button
+      type={type}
+      disabled={disabled}
       whileTap={{ scale: 0.98 }}
       transition={{ duration: 0.12 }}
-      className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
+      className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className} ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
       onClick={onClick}
     >
       {children}

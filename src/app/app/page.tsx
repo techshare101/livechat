@@ -15,6 +15,7 @@ import { ChartTypeSwitcher } from "@/components/chart/ChartTypeSwitcher";
 import { TransformationSpec } from "@/components/chart/TransformationSpec";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
+import { WaitlistModal } from "@/components/ui/WaitlistModal";
 import { parseCSV } from "@/lib/utils/parse-csv";
 import { transformData } from "@/lib/utils/transform-data";
 import { useChartGeneration } from "@/hooks/useChartGeneration";
@@ -32,6 +33,7 @@ export default function AppPage() {
   const [userPrompt, setUserPrompt] = useState<string | null>(null);
   const [showRefinement, setShowRefinement] = useState(false);
   const [chartTypeOverride, setChartTypeOverride] = useState<string | null>(null);
+  const [showWaitlist, setShowWaitlist] = useState(false);
   const chartRef = useRef<ChartJS | null>(null);
 
   const { chartSpec, isLoading, error, reload } = useChartGeneration({
@@ -295,6 +297,9 @@ export default function AppPage() {
                             <Download className="w-4 h-4 mr-2" />
                             Export PNG
                           </Button>
+                          <Button variant="primary" size="sm" onClick={() => setShowWaitlist(true)}>
+                            Upgrade to Pro
+                          </Button>
                         </>
                       ) : (
                         <>
@@ -310,6 +315,9 @@ export default function AppPage() {
                               Export PNG
                             </Button>
                           </SignInButton>
+                          <Button variant="primary" size="sm" onClick={() => setShowWaitlist(true)}>
+                            Upgrade to Pro
+                          </Button>
                         </>
                       )}
                     </div>
@@ -320,6 +328,7 @@ export default function AppPage() {
           )}
         </div>
       </main>
+      <WaitlistModal isOpen={showWaitlist} onClose={() => setShowWaitlist(false)} />
     </div>
   );
 }
