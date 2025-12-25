@@ -22,7 +22,7 @@ export function transformData(
     limit: spec.limit > 0 ? spec.limit : undefined,
   };
 
-  let grouped = applyGrouping(data, transformation);
+  let grouped = applyGrouping(data, { ...transformation, yAxisColumn: spec.yAxisColumn });
   let sorted = applySorting(grouped, transformation);
   let limited = applyLimit(sorted, transformation.limit);
 
@@ -30,7 +30,11 @@ export function transformData(
   
   const datasets = [{
     label: spec.yAxisLabel || spec.yAxisColumn,
-    data: limited.map((row) => Number(row[spec.yAxisColumn]) || 0),
+    data: limited.map((row) => {
+      // Try yAxisColumn first, then aggregationColumn, then fallback
+      const value = row[spec.yAxisColumn] ?? row[spec.aggregationColumn] ?? row["_aggregatedValue"];
+      return Number(value) || 0;
+    }),
   }];
 
   return { labels, datasets };
@@ -39,7 +43,7 @@ export function transformData(
 
 function applyGrouping(
   data: Record<string, unknown>[],
-  transformation: Transformation
+  transformation: Transformation & { yAxisColumn?: string }
 ): Record<string, unknown>[] {
   if (!transformation.groupBy || transformation.groupBy.length === 0) {
     return data;
@@ -65,9 +69,20 @@ function applyGrouping(
       result[col] = keyParts[i];
     });
 
-    if (transformation.aggregationColumn && transformation.aggregation) {
-      const values = rows.map((r) => Number(r[transformation.aggregationColumn!]) || 0);
-      result[transformation.aggregationColumn] = aggregate(values, transformation.aggregation);
+    if (transformation.aggregation) {
+      const aggCol = transformation.aggregationColumn || transformation.yAxisColumn;
+      const values = rows.map((r) => Number(r[aggCol!]) || 0);
+      const aggregatedValue = aggregate(values, transformation.aggregation);
+      
+      // Store result in both aggregationColumn AND yAxisColumn for compatibility
+      if (transformation.aggregationColumn) {
+        result[transformation.aggregationColumn] = aggregatedValue;
+      }
+      if (transformation.yAxisColumn && transformation.yAxisColumn !== transformation.aggregationColumn) {
+        result[transformation.yAxisColumn] = aggregatedValue;
+      }
+      // Also store as "count" or "value" for common cases
+      result["_aggregatedValue"] = aggregatedValue;
     }
 
     aggregated.push(result);
