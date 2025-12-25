@@ -1,0 +1,37 @@
+date,region,product,revenue,units_sold
+2024-01-15,North America,Widget A,12500,250
+2024-01-15,Europe,Widget A,8900,178
+2024-01-15,Asia Pacific,Widget A,6700,134
+2024-01-15,North America,Widget B,9800,196
+2024-01-15,Europe,Widget B,7200,144
+2024-01-15,Asia Pacific,Widget B,5100,102
+2024-02-15,North America,Widget A,14200,284
+2024-02-15,Europe,Widget A,9500,190
+2024-02-15,Asia Pacific,Widget A,7800,156
+2024-02-15,North America,Widget B,11000,220
+2024-02-15,Europe,Widget B,8100,162
+2024-02-15,Asia Pacific,Widget B,5900,118
+2024-03-15,North America,Widget A,15800,316
+2024-03-15,Europe,Widget A,10200,204
+2024-03-15,Asia Pacific,Widget A,8500,170
+2024-03-15,North America,Widget B,12500,250
+2024-03-15,Europe,Widget B,9000,180
+2024-03-15,Asia Pacific,Widget B,6800,136
+2024-04-15,North America,Widget A,13900,278
+2024-04-15,Europe,Widget A,9800,196
+2024-04-15,Asia Pacific,Widget A,7200,144
+2024-04-15,North America,Widget B,10800,216
+2024-04-15,Europe,Widget B,7900,158
+2024-04-15,Asia Pacific,Widget B,5600,112
+2024-05-15,North America,Widget A,16500,330
+2024-05-15,Europe,Widget A,11000,220
+2024-05-15,Asia Pacific,Widget A,9200,184
+2024-05-15,North America,Widget B,13200,264
+2024-05-15,Europe,Widget B,9500,190
+2024-05-15,Asia Pacific,Widget B,7100,142
+2024-06-15,North America,Widget A,18200,364
+2024-06-15,Europe,Widget A,12500,250
+2024-06-15,Asia Pacific,Widget A,10100,202
+2024-06-15,North America,Widget B,14800,296
+2024-06-15,Europe,Widget B,10200,204
+2024-06-15,Asia Pacific,Widget B,7800,156
