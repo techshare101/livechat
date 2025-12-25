@@ -3,7 +3,7 @@
 import { useState, useCallback, useRef } from "react";
 import { Chart as ChartJS } from "chart.js";
 import { motion } from "framer-motion";
-import { BarChart3, ArrowLeft, Download, RefreshCw, MessageSquare } from "lucide-react";
+import { BarChart3, ArrowLeft, Download, RefreshCw, MessageSquare, Save } from "lucide-react";
 import Link from "next/link";
 import { useUser, SignInButton } from "@clerk/nextjs";
 
@@ -19,11 +19,12 @@ import { parseCSV } from "@/lib/utils/parse-csv";
 import { transformData } from "@/lib/utils/transform-data";
 import { useChartGeneration } from "@/hooks/useChartGeneration";
 import { DatasetSchema } from "@/lib/schema/dataset";
+import { saveChart } from "@/lib/storage/saved-charts";
 
 type AppState = "upload" | "prompt" | "chart";
 
 export default function AppPage() {
-  const { isSignedIn } = useUser();
+  const { isSignedIn, user } = useUser();
   const [state, setState] = useState<AppState>("upload");
   const [fileName, setFileName] = useState<string>("");
   const [rawData, setRawData] = useState<Record<string, unknown>[]>([]);
@@ -91,6 +92,20 @@ export default function AppPage() {
     : chartSpec;
 
   const chartData = displaySpec ? transformData(rawData, displaySpec) : null;
+
+  const handleSaveChart = useCallback(() => {
+    if (!isSignedIn || !user || !chartSpec) return;
+    
+    const specToSave = chartTypeOverride 
+      ? { ...chartSpec, chartType: chartTypeOverride as typeof chartSpec.chartType }
+      : chartSpec;
+    
+    const name = prompt("Name your chart:", specToSave.title || "My Chart");
+    if (!name) return;
+    
+    saveChart(user.id, name, specToSave, rawData, fileName);
+    alert("Chart saved! View it in your Saved Charts.");
+  }, [isSignedIn, user, chartSpec, chartTypeOverride, rawData, fileName]);
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -271,17 +286,31 @@ export default function AppPage() {
                         Refine Chart
                       </Button>
                       {isSignedIn ? (
-                        <Button variant="secondary" size="sm" onClick={handleExportPNG}>
-                          <Download className="w-4 h-4 mr-2" />
-                          Export PNG
-                        </Button>
-                      ) : (
-                        <SignInButton mode="modal">
-                          <Button variant="secondary" size="sm">
+                        <>
+                          <Button variant="secondary" size="sm" onClick={handleSaveChart}>
+                            <Save className="w-4 h-4 mr-2" />
+                            Save
+                          </Button>
+                          <Button variant="secondary" size="sm" onClick={handleExportPNG}>
                             <Download className="w-4 h-4 mr-2" />
                             Export PNG
                           </Button>
-                        </SignInButton>
+                        </>
+                      ) : (
+                        <>
+                          <SignInButton mode="modal">
+                            <Button variant="secondary" size="sm">
+                              <Save className="w-4 h-4 mr-2" />
+                              Save
+                            </Button>
+                          </SignInButton>
+                          <SignInButton mode="modal">
+                            <Button variant="secondary" size="sm">
+                              <Download className="w-4 h-4 mr-2" />
+                              Export PNG
+                            </Button>
+                          </SignInButton>
+                        </>
                       )}
                     </div>
                   )}

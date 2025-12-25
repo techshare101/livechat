@@ -148,6 +148,9 @@ export function NavbarWithDropdowns() {
             </SignInButton>
           </SignedOut>
           <SignedIn>
+            <Link href="/saved" className="text-zinc-400 hover:text-white transition-colors text-sm">
+              My Charts
+            </Link>
             <UserButton afterSignOutUrl="/" />
           </SignedIn>
           <Link href="/app">
