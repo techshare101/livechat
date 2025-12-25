@@ -21,8 +21,8 @@ export function FileUpload({ onFileLoaded }: FileUploadProps) {
         return;
       }
 
-      if (file.size > 10 * 1024 * 1024) {
-        setError("File size must be under 10MB");
+      if (file.size > 100 * 1024 * 1024) {
+        setError("File size must be under 100MB");
         return;
       }
 
@@ -93,7 +93,7 @@ export function FileUpload({ onFileLoaded }: FileUploadProps) {
           <p className="mb-2 text-sm text-zinc-400">
             <span className="font-semibold text-white">Click to upload</span> or drag and drop
           </p>
-          <p className="text-xs text-zinc-500">CSV or JSON (max 10MB)</p>
+          <p className="text-xs text-zinc-500">CSV or JSON (max 100MB)</p>
         </div>
         <input
           id="file-upload"
