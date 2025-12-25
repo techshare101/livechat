@@ -21,8 +21,16 @@ export function Footer() {
           </span>
         </div>
 
-        <div className="text-center text-zinc-600 text-sm">
-          <p>© {new Date().getFullYear()} LiveChart. All rights reserved.</p>
+        <div className="text-center text-sm space-y-2">
+          <p className="text-zinc-600">© {new Date().getFullYear()} LiveChart. All rights reserved.</p>
+          <p className="text-zinc-700">
+            Built by{" "}
+            <span className="text-zinc-500">MetalmindTech</span>
+            {" · "}
+            <span className="text-zinc-500">Kojo & Kesarel</span>
+            {" — "}
+            <span className="text-zinc-600 text-xs" title="MetalmindTech's product studio">ArkForge</span>
+          </p>
         </div>
       </div>
     </footer>
